@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cinedig — Replica UI</title>
+
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.99/build/spline-viewer.js"></script>
+  <!-- Script -->
+  <script src="js/scripts.js" defer></script>
+</head>
+<body>
+ <!-- Intro de partículas (overlay) -->
+<div id="cx-intro" aria-hidden="true">
+  <canvas id="cx-intro-canvas"></canvas>
+</div>
+
+
+
+  <!-- FONDO (NO TOCAR) -->
+  <div class="stage">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  
+  <!-- REPLICA DEL LAYOUT SOBRE EL FONDO -->
+  <main class="frame" id="frame">
+    <div class="frame-light left"></div> 
+    <div class="frame-light right"></div>
+    <!-- NAV equivalente -->
+    <nav class="nav">
+      <div class="brand"><div class="logo"></div><span>Cinedig</span></div>
+      <div class="tabs"><a>Inicio</a><a>Populares</a><a>Novedades</a><a>Categorías</a></div>
+      <div class="sp"></div>
+      <button class="icon" aria-label="Agregar">+</button>
+      <button class="icon" aria-label="Usuario">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M4.5 19.5a7.5 7.5 0 0 1 15 0"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <div class="content">
+      <!-- HERO: tarjeta roja + poster grande -->
+      <section class="hero">
+        <div class="callout">
+          <div style="opacity:.95">Descubre</div>
+          <h2>Historias<br>Sin Límites</h2>
+          <div style="opacity:.85">Miles de películas y series exclusivas…</div>
+          <div class="cta">Ver Ahora</div>
+        </div>
+        <div class="heroPoster"></div>
+      </section>
+
+      <!-- ===== CARRUSEL TIPO LUNDEV (integrado) ===== -->
+      <section class="section">
+        <div class="ld-carousel" id="heroCarousel">
+          <!-- lista grande -->
+          <div class="ld-list">
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1920&auto=format&fit=crop" alt="">
+              <div class="ld-content">
+                <div class="ld-author">CINEDIG</div>
+                <div class="ld-title">DESIGN SLIDER</div>
+                <div class="ld-topic">ANIMAL</div>
+                <div class="ld-des">
+                  Descubre mundos asombrosos y narrativas únicas. Cine y series con estrenos semanales y recomendaciones inteligentes.
+                </div>
+                <div class="ld-buttons">
+                  <button>VER MÁS</button>
+                  <button>SUBSCRIBIR</button>
+                </div>
+              </div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?q=80&w=1920&auto=format&fit=crop" alt="">
+              <div class="ld-content">
+                <div class="ld-author">CINEDIG</div>
+                <div class="ld-title">DESIGN SLIDER</div>
+                <div class="ld-topic">NATURE</div>
+                <div class="ld-des">Naturaleza en alta definición, detalles increíbles y bandas sonoras envolventes.</div>
+                <div class="ld-buttons">
+                  <button>VER MÁS</button>
+                  <button>SUBSCRIBIR</button>
+                </div>
+              </div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1606117331085-5760e3b58520?q=80&w=1920&auto=format&fit=crop" alt="">
+              <div class="ld-content">
+                <div class="ld-author">CINEDIG</div>
+                <div class="ld-title">DESIGN SLIDER</div>
+                <div class="ld-topic">CITY</div>
+                <div class="ld-des">Noches de neón, ritmos urbanos y tramas que atrapan.</div>
+                <div class="ld-buttons">
+                  <button>VER MÁS</button>
+                  <button>SUBSCRIBIR</button>
+                </div>
+              </div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1920&auto=format&fit=crop" alt="">
+              <div class="ld-content">
+                <div class="ld-author">CINEDIG</div>
+                <div class="ld-title">DESIGN SLIDER</div>
+                <div class="ld-topic">ADVENTURE</div>
+                <div class="ld-des">Aventuras que te llevarán a explorar lo desconocido.</div>
+                <div class="ld-buttons">
+                  <button>VER MÁS</button>
+                  <button>SUBSCRIBIR</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- miniaturas -->
+          <div class="ld-thumbnail">
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=800&auto=format&fit=crop" alt="">
+              <div class="ld-txt"><div class="ld-tt">Name Slider</div><div class="ld-ds">Description</div></div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?q=80&w=800&auto=format&fit=crop" alt="">
+              <div class="ld-txt"><div class="ld-tt">Name Slider</div><div class="ld-ds">Description</div></div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1606117331085-5760e3b58520?q=80&w=800&auto=format&fit=crop" alt="">
+              <div class="ld-txt"><div class="ld-tt">Name Slider</div><div class="ld-ds">Description</div></div>
+            </div>
+            <div class="ld-item">
+              <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=800&auto=format&fit=crop" alt="">
+              <div class="ld-txt"><div class="ld-tt">Name Slider</div><div class="ld-ds">Description</div></div>
+            </div>
+          </div>
+
+          <!-- flechas -->
+          <div class="ld-arrows">
+            <button id="ld-prev" aria-label="Anterior"><</button>
+            <button id="ld-next" aria-label="Siguiente">></button>
+          </div>
+
+          <!-- barra de tiempo -->
+          <div class="ld-time"></div>
+        </div>
+      </section>
+      <!-- ===== FIN CARRUSEL ===== -->
+
+      <!-- ¿Por qué Cinedig? -->
+<section class="section why-cinedig">
+  <h3 class="why-title">¿Por qué Cinedig?</h3>
+
+  <div class="feat-grid">
+    <article class="feat-card reveal">
+      <div class="feat-icon">⚡</div>
+      <h4>Increíblemente Rápido</h4>
+      <p>Nuestra tecnología de streaming se optimiza en tiempo real.
+        Disfruta de tu contenido en 4K sin pausas ni buffering.</p>
+    </article>
+
+    <article class="feat-card reveal">
+      <div class="feat-icon">$</div>
+      <h4>Más Barato</h4>
+      <p>Planes flexibles que se adaptan a tu bolsillo. Obtén más
+        contenido por menos, sin contratos a largo plazo.</p>
+    </article>
+
+    <article class="feat-card reveal">
+      <div class="feat-icon">💡</div>
+      <h4>Diseño Intuitivo</h4>
+      <p>Una interfaz limpia y fácil de usar. Encuentra lo que buscas en
+        segundos, no en minutos. Tus series favoritas te encuentran a ti.</p>
+    </article>
+  </div>
+</section>
+<!-- EXPLORAR POR CATEGORÍAS (nuevo bloque) -->
+<section class="section explore-cats">
+  <h3 class="cats2-title">Explorar por Categorías</h3>
+
+  <div class="cats2">
+    <button class="cat-pill">
+      <!-- Acción -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 12h8M3 6h14M3 18h10" />
+      </svg>
+      <span>Acción</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Aventura -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2l3 7h7l-5.5 4 2.5 7-7-4-7 4 2.5-7L2 9h7z" />
+      </svg>
+      <span>Aventura</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Ciencia Ficción -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M2 12h5M17 12h5M12 2v5M12 17v5"/>
+      </svg>
+      <span>Ciencia Ficción</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Drama -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 5h16v7c0 4-3 7-8 7s-8-3-8-7V5z"/>
+        <path d="M9 11c0 1-1 2-2 2s-2-1-2-2m12 0c0 1-1 2-2 2s-2-1-2-2"/>
+      </svg>
+      <span>Drama</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Comedia -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="8" cy="10" r="1"/>
+        <circle cx="16" cy="10" r="1"/>
+        <path d="M7 15s2 2 5 2 5-2 5-2"/>
+      </svg>
+      <span>Comedia</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Terror -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3c-4 0-7 3-7 7 0 6 7 11 7 11s7-5 7-11c0-4-3-7-7-7z"/>
+        <circle cx="9" cy="10" r="1"/>
+        <circle cx="15" cy="10" r="1"/>
+      </svg>
+      <span>Terror</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Romance -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s-7-4.35-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.65-7 9-7 9z"/>
+      </svg>
+      <span>Romance</span>
+    </button>
+
+    <button class="cat-pill">
+      <!-- Animación -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <path d="M8 3v4M16 3v4"/>
+      </svg>
+      <span>Animación</span>
+    </button>
+  </div>
+</section>
+
+
+<section class="cdg3d" aria-label="Showcase 3D">
+  <div class="carousel">
+    <div class="carousel-control-button left">
+      <input type="radio" name="carousel-control-input">
+    </div>
+    <div class="carousel-control-button right">
+      <input type="radio" name="carousel-control-input" checked>
+    </div>
+
+    <div class="carousel-rotation-direction">
+      <ul class="carousel-item-wrapper" style="--_num-elements: 11">
+        <li class="carousel-item" style="--_index:1;  --_image-url:url('https://images.pexels.com/photos/3052361/pexels-photo-3052361.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 1</a></li>
+        <li class="carousel-item" style="--_index:2;  --_image-url:url('https://images.pexels.com/photos/17545002/pexels-photo-17545002/free-photo-of-statue-of-liberty.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 2</a></li>
+        <li class="carousel-item" style="--_index:3;  --_image-url:url('https://images.pexels.com/photos/11605747/pexels-photo-11605747.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 3</a></li>
+        <li class="carousel-item" style="--_index:4;  --_image-url:url('https://images.pexels.com/photos/13968337/pexels-photo-13968337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 4</a></li>
+        <li class="carousel-item" style="--_index:5;  --_image-url:url('https://images.pexels.com/photos/4116967/pexels-photo-4116967.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 5</a></li>
+        <li class="carousel-item" style="--_index:6;  --_image-url:url('https://images.pexels.com/photos/12565872/pexels-photo-12565872.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load')"><a target="_blank">Card 6</a></li>
+        <li class="carousel-item" style="--_index:7;  --_image-url:url('https://images.pexels.com/photos/13359841/pexels-photo-13359841.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load')"><a target="_blank">Card 7</a></li>
+        <li class="carousel-item" style="--_index:8;  --_image-url:url('https://images.pexels.com/photos/9244253/pexels-photo-9244253.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 8</a></li>
+        <li class="carousel-item" style="--_index:9;  --_image-url:url('https://images.pexels.com/photos/13972538/pexels-photo-13972538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 9</a></li>
+        <li class="carousel-item" style="--_index:10; --_image-url:url('https://images.pexels.com/photos/5357262/pexels-photo-5357262.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 10</a></li>
+        <li class="carousel-item" style="--_index:11; --_image-url:url('https://images.pexels.com/photos/14727693/pexels-photo-14727693.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"><a target="_blank">Card 11</a></li>
+
+        <li class="carousel-ground"></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section devices-section reveal">
+  
+  <div class="devices-grid">
+    
+    <div class="devices-text">
+      <h3>Míralo donde quieras.</h3>
+      <p>Disfruta de Cinedig en tu TV, consola, laptop, tablet o smartphone. Nuestra app se sincroniza perfectamente para que continúes donde lo dejaste, sin importar el dispositivo.</p>
+      
+      <button class="cta-button-cyan" id="show-devices-btn">
+        Ver dispositivos compatibles
+      </button>
+    </div>
+
+    <div class="devices-image">
+      <img src="https://images.pexels.com/photos/4009409/pexels-photo-4009409.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Persona usando Cinedig en una tablet en su sala">
+    </div>
+
+  </div>
+
+  <div class="devices-icons-container" id="devices-icons">
+    
+    <div class="cats2">
+      
+      <button class="cat-pill">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 9.5a5 5 0 0 1-10 0m5 11.5v-11m-1.5 1.5L8 13m8 0l-2.5-2m-3.5-6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+          <path d="M4.5 10.5A7.5 7.5 0 0 0 12 18a7.5 7.5 0 0 0 7.5-7.5H4.5Z"/>
+        </svg>
+        <span>Android</span>
+      </button>
+
+      <button class="cat-pill">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+           <path d="M11.28 7.4a2.2 2.2 0 0 0-2.06-2.9 2.14 2.14 0 0 0-2.12 2.3c0 1.2.94 1.5 2.12 1.5a2.2 2.2 0 0 0 2.06-1.5m.1 11.4c.9-.9 1.4-2.3.9-3.6-1-2.8-3.4-2.8-4.4-2.8-1.2 0-2.6.9-3.6 2.1-.9 1.1-1.6 2.9-1.1 4.3 1 2.7 3.2 3.6 4.6 3.6 1.1 0 2.4-.8 3.6-3.6Z"/>
+        </svg>
+        <span>iOS</span>
+      </button>
+      
+      <button class="cat-pill">
+         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+           <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+           <polyline points="17 2 12 7 7 2"></polyline>
+        </svg>
+        <span>Smart TV</span>
+      </button>
+
+      <button class="cat-pill">
+         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.3 2.6a1 1 0 0 1-.8 1.4H3.5a1 1 0 0 1-.8-1.4L4 16Z"/>
+        </svg>
+        <span>Laptop</span>
+      </button>
+
+      <button class="cat-pill">
+         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+           <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+           <line x1="12" y1="18" x2="12" y2="18"></line>
+        </svg>
+        <span>Tablet</span>
+      </button>
+      
+      <button class="cat-pill">
+         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+           <path d="M4 12h1m14 0h1m-7-5v1m0 8v1m-6-4h1m8 0h1"/>
+           <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+        </svg>
+        <span>Consolas</span>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="hero-carrusel">
+  
+  <div class="hero-text-content">
+    <h2>Cinedig: Tu universo de historias.</h2>
+    <p>Donde cada momento cobra vida.</p>
+    <div class="cta">Suscríbete Ahora</div>
+  </div>
+
+  <div class="hero-gradient-overlay"></div>
+
+  <div class="hero-rail">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Spiderman" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Zendaya en Dune" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Maléfica" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Mia Goth en Pearl" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Cruella" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Cyberpunk Edgerunners" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="John Wick" class="hero-character" loading="eager">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="Manson Thames" class="hero-character" loading="eager">
+
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=500&auto=format&fit=crop" alt="" class="hero-character" aria-hidden="true">
+  </div>
+</section>
+
+<section class="section faq-grid-container reveal">
+
+  <div class="faq-content">
+    <h3 class="faq-title">¿Tienes preguntas?</h3>
+    
+    <div class="faq-item">
+      <button class="faq-question">¿Cuánto cuesta Cinedig?</button>
+      <div class="faq-answer">
+        <p>Ofrecemos 3 planes flexibles: Básico por $99/mes (1 pantalla, HD), Estándar por $149/mes (2 pantallas, 4K+HDR) y Premium por $199/mes (4 pantallas, 4K+HDR y descargas).</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <button class="faq-question">¿Dónde está disponible Cinedig?</button>
+      <div class="faq-answer">
+        <p>¡Donde quieras! Puedes ver Cinedig en tu Smart TV, consolas de videojuegos (PlayStation y Xbox), smartphones (iOS y Android), tablets y cualquier navegador web.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">¿A qué contenido tengo acceso?</button>
+      <div class="faq-answer">
+        <p>Tu suscripción te da acceso ilimitado a miles de películas taquilleras, series galardonadas, estrenos exclusivos de Cinedig cada semana, documentales y una selección de canales de TV en vivo.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">¿Hay un periodo de prueba gratuito?</button>
+      <div class="faq-answer">
+        <p>¡Claro! Todos los usuarios nuevos obtienen 7 días de prueba gratuita de nuestro Plan Premium. Tienes acceso a todo el catálogo sin compromiso.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">¿Es fácil cancelar?</button>
+      <div class="faq-answer">
+        <p>Fácil y sin contratos. Puedes cancelar tu suscripción en cualquier momento desde la configuración de tu cuenta con solo dos clics. Sin preguntas ni penalizaciones.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">¿Qué son los perfiles de usuario?</button>
+      <div class="faq-answer">
+        <p>Puedes crear hasta 5 perfiles por cuenta (incluyendo perfiles infantiles). Cada perfil tiene sus propias recomendaciones y listas de seguimiento, para que la experiencia sea 100% personalizada.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="faq-spline">
+    <spline-viewer url="https://prod.spline.design/0dsE8rtwnawGeAut/scene.splinecode"></spline-viewer>
+    <img src="img/icon.png" class="spline-cover-image" alt="Cubierta de marca de agua">
+  </div>
+  
+</section>
+
+  
+  
+</section>
+
+      <!-- Novedades Exclusivas -->
+      <section class="section">
+        <h3>Novedades Exclusivas</h3>
+        <div class="rail">
+          <div class="chip"><div class="label">Nexus II</div></div>
+          <div class="chip"><div class="label">Origen</div></div>
+          <div class="chip"><div class="label">Ascenso</div></div>
+          <div class="chip"><div class="label">Archivo Beta</div></div>
+        </div>
+      </section>
+
+      <!-- Explorar por categorías (fila de iconos) -->
+      <section class="section">
+        <h3>Explorar por Categorías</h3>
+        <div class="cats">
+          <div class="cbtn"><span>🛡️</span>Acción</div>
+          <div class="cbtn"><span>🎬</span>Películas</div>
+          <div class="cbtn"><span>🧭</span>Aventura</div>
+          <div class="cbtn"><span>🛰️</span>Sci-Fi</div>
+          <div class="cbtn"><span>⛰️</span>Drama</div>
+          <div class="cbtn"><span>🎧</span>Audio</div>
+          <div class="cbtn"><span>⭐</span>Top</div>
+          <div class="cbtn"><span>🎭</span>Series</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Card flotante como en la imagen -->
+    <div class="float">
+      <button class="close" id="close">✕</button>
+      <div class="row">
+        <div class="poster"></div>
+        <div>
+          <div class="meta">Aventura · Ciencia Ficción</div>
+          <div class="mtitle">Mundo Subterráneo</div>
+          <div class="meta">Desde el corazón de la megalópolis te atrapará escena a escena…</div>
+          <div class="stars">★★★★★</div>
+          <span class="pill">Reproducir Película</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
