@@ -1,3 +1,33 @@
+// --- Control de intro: primera visita o recarga ---
+const INTRO_FLAG = 'cinedigIntroPlayed';
+
+function shouldSkipIntro() {
+  // 1) Reproduce SI fue recarga explícita
+  try {
+    const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    if (nav && nav.type === 'reload') {
+      // Forzamos reproducción en reload
+      sessionStorage.setItem(INTRO_FLAG, '1'); // marcamos igual la sesión
+      return false; // NO saltar
+    }
+  } catch (_) {}
+
+  // 2) Si ya se reprodujo en esta pestaña (misma sesión), saltar
+  if (sessionStorage.getItem(INTRO_FLAG) === '1') return true;
+
+  // 3) Primera vez en esta pestaña: reproducir y marcar
+  sessionStorage.setItem(INTRO_FLAG, '1');
+  return false;
+}
+
+// (Opcional) Si la página viene del back/forward cache, aseguramos que siga oculta
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) {
+    const w = document.getElementById('cx-intro');
+    if (w) w.style.display = 'none';
+  }
+});
+
 /* Animación fluida del fondo (NO TOCADA) */
 const blobs = [
   {el: document.querySelector('.b1'), baseX: -150, baseY: -100, ampX: 200, ampY: 180, speed: 0.00025, offset: 0},
@@ -19,11 +49,6 @@ requestAnimationFrame(animate);
 window.addEventListener('resize',()=>{
   blobs[1].baseX = window.innerWidth - 400;
   blobs[2].baseY = window.innerHeight - 300;
-});
-
-/* (opcional) cerrar la tarjeta flotante */
-document.getElementById('close').addEventListener('click',()=> {
-  document.querySelector('.float').style.display='none';
 });
 
 /* ===== Zoom NOTORIO y elegante en .heroPoster con JavaScript ===== */
@@ -73,7 +98,7 @@ document.getElementById('close').addEventListener('click',()=> {
 })();
 
 /* ================================ */
-/*  CARRUSEL TIPO LUNDEV INTEGRADO  */
+/* CARRUSEL TIPO LUNDEV INTEGRADO  */
 /* ================================ */
 (function initLundevCarousel(){
   const root = document.getElementById('heroCarousel');
@@ -135,26 +160,19 @@ document.getElementById('close').addEventListener('click',()=> {
   }
 })();
 
-/* ===== Scroll Reveal para las cards de “¿Por qué Cinedig?” ===== */
-(function initReveal(){
-  const els = document.querySelectorAll('.feat-card.reveal');
-  if (!els.length) return;
+/* ===== Scroll Reveal (Movido a DOMContentLoaded) ===== */
+/* (function initReveal(){ ... })(); */ // Se movió abajo
 
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if (e.isIntersecting){
-        e.target.classList.add('show');
-        // si no quieres que “desaparezcan” al subir, descomenta:
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.18 });
-
-  els.forEach(el=> io.observe(el));
-})();
-
-/* ========= INTRO de partículas: “CINEDIG” con brillo interno por partícula ========= */
+/* ========= INTRO de partículas: “CINEDIG” ========= */
 (function introParticles(){
+    if (shouldSkipIntro()) {
+    const skipWrap = document.getElementById('cx-intro');
+    if (skipWrap) {
+      skipWrap.classList.add('hide'); // respeta tu transición si existe
+      skipWrap.style.display = 'none';
+    }
+    return;
+  }
   const WRD = 'CINEDIG';
   const DENSITY = 1.5; 
   const HOLD_SOLID_MS = 3000; // palabra sólida (3s)
@@ -168,21 +186,15 @@ document.getElementById('close').addEventListener('click',()=> {
 
   const ctx   = cvs.getContext('2d', { alpha:false, desynchronized:true });
 
-  /* ⬇️ Optimización 1: DPR adaptativo para pantallas grandes */
   const DPR = (window.innerWidth * window.innerHeight > 1600*900)
     ? 1.0
     : Math.min(window.devicePixelRatio || 1, 1.25);
 
   let W = 0, H = 0, t0 = 0, phase = 'build', rafId = 0;
 
-  // Partículas
   let pts = [];         // {x,y, tx,ty, vx,vy, r, li, seed}
   let wordMinX=0, wordMaxX=0, wordMinY=0, wordMaxY=0;
-
-  const MAX_PTS_DESKTOP = 1400;
-  const MAX_PTS_MOBILE  = 900;
-
-  // Utilidades
+  
   const easeInOutCubic = p => p<0.5 ? 4*p*p*p : 1 - Math.pow(-2*p+2,3)/2;
   const clamp01 = v => Math.max(0, Math.min(1, v));
 
@@ -198,7 +210,6 @@ document.getElementById('close').addEventListener('click',()=> {
     }
   }
 
-  // ====== (OPTIMIZADO) Dibujo batch de partículas ======
   function drawWordParticles(alpha=1){
     if(alpha !== 1){ ctx.save(); ctx.globalAlpha = alpha; }
     ctx.fillStyle = '#fff';
@@ -212,7 +223,6 @@ document.getElementById('close').addEventListener('click',()=> {
     if(alpha !== 1) ctx.restore();
   }
 
-  // Construcción de targets y límites de la palabra
   function makeTargets(){
     pts = [];
 
@@ -273,7 +283,6 @@ document.getElementById('close').addEventListener('click',()=> {
       cursorX += w + TRACK;
     }
 
-    // limitar densidad con cap dinámico (⬇️ Optimización 2)
     let targets = allTargets;
 
     function computeCap(){
@@ -281,7 +290,7 @@ document.getElementById('close').addEventListener('click',()=> {
       const base   = 820 * DENSITY;
       const varAdj = 260 * DENSITY * Math.log2(area + 1);
       let cap = Math.floor(base + varAdj);
-      if (area > 2.2) cap = Math.floor(cap * 0.85);  // recorta un poco en áreas grandes
+      if (area > 2.2) cap = Math.floor(cap * 0.85); 
       cap = Math.min(cap, Math.floor(2000 * DENSITY));
       return Math.max(Math.floor(650 * DENSITY), cap);
     }
@@ -297,7 +306,6 @@ document.getElementById('close').addEventListener('click',()=> {
       targets = slim;
     }
 
-    // origen anular (todos lados)
     pts = targets.map(t => {
       const ang = Math.random() * Math.PI * 2;
       const rad = Math.max(W, H) * (0.55 + Math.random()*0.35);
@@ -319,15 +327,10 @@ document.getElementById('close').addEventListener('click',()=> {
     phase = 'build';
   }
 
-  // Brillo interno por partícula (⬇️ Optimización 3)
   function drawInternalGlow(progress, now){
     const p = easeInOutCubic(clamp01(progress));
     const baseFront = wordMinX + (wordMaxX - wordMinX) * p;
-
-    // Escala por área para abaratar en pantallas grandes
     const area = (W * H) / (1280 * 720);
-
-    // Parámetros del frente (ligeramente más austeros en áreas grandes)
     const spanBase = Math.max(60*DPR, (wordMaxX - wordMinX) * 0.10);
     const span  = spanBase / (area > 2.2 ? 1.15 : 1.0);
     const freqY = 0.012 * DPR;
@@ -338,26 +341,18 @@ document.getElementById('close').addEventListener('click',()=> {
     ctx.globalCompositeOperation = 'lighter';
     for(let i=0;i<pts.length;i++){
       const a = pts[i];
-
-      // ⬇️ (Opcional) skipping ultra-ligero solo en áreas enormes
-      // if (area > 2.8 && (i % 5 === 0)) continue;
-
       const wobble = Math.sin(a.ty * freqY + noiseT + a.seed*0.1) * ampX;
       const dx = (a.tx - (baseFront + wobble));
       const w = Math.exp(- (dx*dx) / (2*span*span));
       if (w > 0.02){
-        // Alpha/blur más comedidos a pantalla grande
         const alphaMax = area > 2.2 ? 0.55 : 0.75;
         const blurMax  = area > 2.2 ? (18 * DPR) : (22 * DPR);
-
         const alpha = 0.10 + alphaMax * w;
         const blur  = (8 + blurMax * w);
         const rr    = a.r + (0.6 + 1.2*w) * DPR;
-
         ctx.shadowColor = `rgba(255,255,255,${alpha})`;
         ctx.shadowBlur  = blur;
         ctx.fillStyle   = `rgba(255,255,255,${alpha})`;
-
         ctx.beginPath();
         ctx.arc(a.tx, a.ty, rr, 0, Math.PI*2);
         ctx.fill();
@@ -365,19 +360,14 @@ document.getElementById('close').addEventListener('click',()=> {
     }
     ctx.restore();
   }
-
+  
   function tick(now){
     const elapsed = now - t0;
-
-    // fondo negro
     ctx.fillStyle = '#000';
     ctx.fillRect(0,0,W,H);
-
     if(phase === 'build'){
       const p = clamp01(elapsed / BUILD_MS);
       const e = easeInOutCubic(p);
-
-      // (OPTIMIZADO) batch draw durante build
       ctx.fillStyle = '#fff';
       ctx.beginPath();
       for(let i=0;i<pts.length;i++){
@@ -388,28 +378,25 @@ document.getElementById('close').addEventListener('click',()=> {
         a.vy = a.vy*0.85 + dy*0.08*e;
         a.x += a.vx;
         a.y += a.vy;
-
         ctx.moveTo(a.x + a.r, a.y);
         ctx.arc(a.x, a.y, a.r, 0, Math.PI*2);
       }
       ctx.fill();
-
       if(elapsed >= BUILD_MS){
         phase = 'hold';
         t0 = now;
       }
     }
     else if(phase === 'hold'){
-      drawWordParticles(); // ya optimizado
+      drawWordParticles();
       if(elapsed >= HOLD_SOLID_MS){
         phase = 'shimmer';
         t0 = now;
       }
     }
     else if(phase === 'shimmer'){
-      drawWordParticles();                // partículas formando la palabra
-      drawInternalGlow(elapsed / SHIMMER_MS, now); // brillo interno fluido
-
+      drawWordParticles();
+      drawInternalGlow(elapsed / SHIMMER_MS, now);
       if(elapsed >= SHIMMER_MS){
         phase = 'fade';
         t0 = now;
@@ -426,11 +413,8 @@ document.getElementById('close').addEventListener('click',()=> {
         return;
       }
     }
-
     rafId = requestAnimationFrame(tick);
   }
-
-  // Inicializa
   window.addEventListener('resize', resize);
   resize();
   makeTargets();
@@ -439,46 +423,47 @@ document.getElementById('close').addEventListener('click',()=> {
 })();
 
 
-
-
-
-// Espera a que todo el HTML esté cargado
+/* ==================================================
+   SCRIPT EJECUTADOS CUANDO EL HTML ESTÁ LISTO
+   ================================================== */
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* --- SCRIPT (Opcional) CERRAR TARJETA FLOTANTE --- */
+  // (Movido aquí para asegurar que el DOM esté cargado)
+  const closeButton = document.getElementById('close');
+  if (closeButton) {
+    closeButton.addEventListener('click',()=> {
+      document.querySelector('.float').style.display='none';
+    });
+  }
+  
   /* ==================================================
      SCRIPT 1: ANIMACIÓN DE SCROLL (Intersection Observer)
      ================================================== */
-  // (Este script funcionará para TUS .feat-card,
-  // y también para la nueva .devices-section)
-  
-  // 1. Opciones para el observador
   const revealOptions = {
-    root: null, // Observa en relación al viewport
+    root: null,
     rootMargin: '0px',
-    threshold: 0.1 // Se activa cuando el 10% del elemento es visible
+    threshold: 0.1
   };
 
-  // 2. La función que se ejecuta cuando el elemento entra/sale
   const revealCallback = (entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        // Si el elemento es visible, añade la clase 'show'
         entry.target.classList.add('show');
-        
-        // (Opcional) Deja de observar este elemento una vez mostrado
-        // para que no se repita la animación.
-        // observer.unobserve(entry.target); 
-      } else {
-        // (Opcional) Si quieres que se oculte al salir, descomenta esto
-        // entry.target.classList.remove('show');
+        // observer.unobserve(entry.target); // Descomenta si no quieres que se repita
       }
+      /* (Opcional: descomenta para que se oculte al salir)
+      else {
+        entry.target.classList.remove('show');
+      }
+      */
     });
   };
 
-  // 3. Crear el observador
   const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
-
-  // 4. Buscar todos los elementos .reveal y observarlos
+  
+  // CORRECCIÓN: El script original .feat-card.reveal era muy específico
+  // Vamos a hacerlo global para TODOS los elementos .reveal
   const reveals = document.querySelectorAll('.reveal');
   reveals.forEach(el => {
     revealObserver.observe(el);
@@ -488,21 +473,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==================================================
      SCRIPT 2: MOSTRAR/OCULTAR ICONOS DE DISPOSITIVOS
      ================================================== */
-  
-  // 1. Seleccionar el botón y el contenedor de iconos
   const devicesButton = document.getElementById('show-devices-btn');
   const devicesIcons = document.getElementById('devices-icons');
 
-  // 2. Asegurarnos de que existen antes de añadir el evento
   if (devicesButton && devicesIcons) {
-    
-    // 3. Añadir el evento 'click' al botón
     devicesButton.addEventListener('click', () => {
-      
-      // Alterna (pone o quita) la clase 'show' en el contenedor
       devicesIcons.classList.toggle('show');
-
-      // (Opcional) Cambia el texto del botón
       if (devicesIcons.classList.contains('show')) {
         devicesButton.textContent = 'Ocultar dispositivos';
       } else {
@@ -511,44 +487,89 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-});
-
-
-/* ==================================================
+  /* ==================================================
      SCRIPT 3: LÓGICA DEL ACORDEÓN DE FAQ
      ================================================== */
-  
-  // 1. Selecciona TODAS las preguntas
   const allFaqQuestions = document.querySelectorAll('.faq-question');
 
-  // 2. Itera sobre cada botón de pregunta
   allFaqQuestions.forEach(button => {
-    
-    // 3. Añade un evento de 'click' a cada uno
     button.addEventListener('click', () => {
-      
-      // Selecciona el div de la respuesta (es el siguiente elemento)
       const answer = button.nextElementSibling;
-      // Comprueba si la pregunta clickeada ya estaba activa
       const isActive = button.classList.contains('active');
 
-      // Cierra todas las demás preguntas
+      // Cierra todas las demás
       allFaqQuestions.forEach(otherButton => {
         if (otherButton !== button) {
           otherButton.classList.remove('active');
-          otherButton.nextElementSibling.classList.remove('show');
+          // Asegúrate de que nextElementSibling exista antes de quitar la clase
+          if (otherButton.nextElementSibling) {
+            otherButton.nextElementSibling.classList.remove('show');
+          }
         }
       });
 
-      // Abre o cierra la pregunta actual
-      // Si no estaba activa, la abre. Si ya estaba activa, el bucle anterior ya la cerró.
+      // Abre o cierra la actual
       if (!isActive) {
         button.classList.add('active');
-        answer.classList.add('show');
+        if (answer) {
+          answer.classList.add('show');
+        }
       }
       
     });
   });
 
+  /* ==================================================
+     SCRIPT 4: LÓGICA DE LOGIN Y SOLICITUD (para login.html)
+     ================================================== */
+  
+  // 1. Selecciona los elementos del login
+  const loginForm = document.getElementById('login-form');
+  const requestForm = document.getElementById('request-form');
+  const showRequestLink = document.getElementById('show-request-link');
+  const showLoginLink = document.getElementById('show-login-link');
 
+  // 2. IMPORTANTE: 'if' para que SÓLO se ejecute en login.html
+  if (loginForm && requestForm && showRequestLink && showLoginLink) {
 
+    // 3. Evento para mostrar el formulario de SOLICITUD
+    showRequestLink.addEventListener('click', (e) => {
+      e.preventDefault(); 
+      loginForm.style.display = 'none';
+      requestForm.style.display = 'grid'; 
+    });
+
+    // 4. Evento para mostrar el formulario de LOGIN
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault(); 
+      requestForm.style.display = 'none';
+      loginForm.style.display = 'grid';
+    });
+
+    // 5. Lógica para enviar la solicitud a WhatsApp
+    requestForm.addEventListener('submit', (e) => {
+      e.preventDefault(); 
+
+      const adminWhatsAppNumber = '522881009235'; 
+      const fullname = document.getElementById('fullname').value;
+      const phone = document.getElementById('phone').value;
+
+      let message = `¡Hola! 👋\n\n`;
+      message += `Quisiera solicitar acceso a Cinedig.\n\n`;
+      message += `*Nombre:* ${fullname}\n`;
+      message += `*Teléfono:* ${phone}\n\n`;
+      message += `Espero mi usuario y contraseña. ¡Gracias!`;
+
+      const whatsappURL = `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+      window.open(whatsappURL, '_blank');
+      alert('Se abrirá WhatsApp para completar tu solicitud. Por favor, envía el mensaje pre-llenado.');
+
+      requestForm.reset();
+      requestForm.style.display = 'none';
+      loginForm.style.display = 'grid';
+    });
+  
+  } // <-- Fin del 'if' de login
+
+}); // <-- ESTA ES LA ÚNICA LLAVE DE CIERRE (FIN DEL DOMContentLoaded)

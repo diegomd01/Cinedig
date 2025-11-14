@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cinedig — Iniciar Sesión</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <link rel="stylesheet" href="css/login.css">
+
+  <script src="js/scripts.js" defer></script>
+</head>
+<body class="login-body">
+
+  <div class="stage">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div class="frame login-card">
+
+    <form class="login-form" id="login-form">
+      <div class="brand-login">
+        <div class="logo"></div>
+        <span>Cinedig</span>
+      </div>
+      <h2>Iniciar Sesión</h2>
+      
+      <div class="input-group">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <button type="submit" class="cta login-button">Ingresar</button>
+      
+      <p class="form-switcher">
+        ¿No tienes cuenta? 
+        <a href="#" id="show-request-link">Solicita tu acceso aquí</a>
+      </p>
+    </form>
+
+    <form class="login-form" id="request-form" style="display: none;">
+      <div class="brand-login">
+        <div class="logo"></div>
+        <span>Cinedig</span>
+      </div>
+      <h2>Solicitar Acceso</h2>
+      <p class="form-description">
+        Ingresa tus datos y un administrador te contactará con tu usuario y contraseña.
+      </p>
+
+      <div class="input-group">
+        <label for="fullname">Nombre Completo</label>
+        <input type="text" id="fullname" name="fullname" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="phone">Número de Teléfono</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      
+      <button type="submit" class="cta login-button">Enviar Solicitud</button>
+      
+      <p class="form-switcher">
+        ¿Ya tienes cuenta? 
+        <a href="#" id="show-login-link">Iniciar Sesión</a>
+      </p>
+    </form>
+
+  </div>
+
+</body>
+</html>

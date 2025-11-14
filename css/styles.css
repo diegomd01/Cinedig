@@ -1193,3 +1193,114 @@ html,body{height:100%;margin:0;background:#0b0b0c;font-family:system-ui;overflow
     display: none;
   }
 }
+
+/* =======================================
+   ESTILOS DE LOGIN (v2 - Heredando de styles.css)
+   ======================================= */
+
+/* 1. Fondo y Centrado */
+.login-body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  overflow: hidden; 
+}
+
+/* 2. Tarjeta "Glassmorphism"
+   (Hereda de .frame, solo ajustamos el tamaño y padding) */
+.login-card {
+  width: 400px;
+  max-width: 90vw;
+  padding: 30px;
+  /* Ya no necesita background, shadow, border, etc. */
+}
+
+/* 3. Estilos del Formulario Interno */
+.login-form {
+  display: grid;
+  gap: 18px;
+}
+.login-form h2 {
+  color: #fff;
+  text-align: center;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+/* Reutilizamos el .brand y .logo de styles.css */
+.brand-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 800;
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+
+
+/* 4. Campos de Texto (Inputs) */
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+.input-group label {
+  color: #aeb4c2;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.input-group input {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.input-group input:focus {
+  border-color: var(--r1, #ff2a2a);
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.3);
+}
+
+/* 5. Botón y Enlaces */
+
+/* 💡 ESTE ES EL CAMBIO 💡
+   Hereda todo de .cta, solo ajusta el ancho y tamaño.
+*/
+.login-button {
+  width: 100%;
+  font-size: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  
+  /* (Opcional) Añadimos un hover más notorio */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 59, 48, 0.25);
+}
+
+
+.form-description {
+  font-size: 14px;
+  color: #aeb4c2;
+  text-align: center;
+  margin: -10px 0 0 0;
+  line-height: 1.5;
+}
+
+.form-switcher {
+  font-size: 14px;
+  color: #aeb4c2;
+  text-align: center;
+  margin-top: 10px;
+}
+.form-switcher a {
+  color: var(--r1, #ff2a2a);
+  text-decoration: none;
+  font-weight: 600;
+}
