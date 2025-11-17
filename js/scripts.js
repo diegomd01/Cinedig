@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     requestForm.addEventListener('submit', (e) => {
       e.preventDefault(); 
 
-      const adminWhatsAppNumber = '521288109235'; 
+      const adminWhatsAppNumber = '5212881099235'; 
       const fullname = document.getElementById('fullname').value;
       const phone = document.getElementById('phone').value;
 
