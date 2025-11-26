@@ -1304,3 +1304,397 @@ html,body{height:100%;margin:0;background:#0b0b0c;font-family:system-ui;overflow
   text-decoration: none;
   font-weight: 600;
 }
+
+/* ====================================================
+   ESTILOS ESPECÍFICOS DE LA COLECCIÓN DE PELÍCULAS (AGREGADOS)
+   ==================================================== */
+
+/* Contenedor principal de la nueva página */
+.populares-container {
+    padding: 20px;
+}
+
+/* Header de la sección de películas para integrarlo con .content */
+.populares-header {
+    background: linear-gradient(135deg, rgba(20,22,27,.72), rgba(10,12,16,.72)); /* Usamos colores oscuros del frame */
+    color: #e9eef6;
+    padding: 30px 0;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+}
+
+.populares-title {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.app-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.form-section {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.08); /* Estilo Glassmorphism */
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.movies-section {
+    flex: 2;
+    min-width: 300px;
+}
+
+h2 {
+    color: #e9eef6; /* Color de texto claro */
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #aeb4c2; /* Color de texto para labels */
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border 0.3s;
+    background: rgba(0, 0, 0, 0.2); /* Fondo semi-transparente */
+    color: #fff;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--r1, #ff2a2a); /* Usamos tu color principal */
+    outline: none;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.rating-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: #aeb4c2;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 5px;
+}
+
+.star {
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star.active {
+    color: #f39c12;
+}
+
+.btn {
+    background-color: var(--r1, #ff2a2a); /* Usamos tu color principal */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn:hover {
+    background-color: #c0392b;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+}
+
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-danger {
+    background-color: var(--r3, #e0003b);
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.08); /* Estilo Glassmorphism */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.movie-poster {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 15px;
+    color: #e9eef6;
+}
+
+.movie-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.movie-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.movie-genre {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.movie-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #f39c12;
+    font-weight: 600;
+}
+
+.movie-description {
+    font-size: 0.9rem;
+    color: #aeb4c2;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #7f8c8d;
+}
+
+.empty-state img {
+    max-width: 200px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    transform: translateX(150%);
+    transition: transform 0.3s;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background-color: #2ecc71;
+}
+
+.notification.error {
+    background-color: var(--r1, #ff2a2a);
+}
+
+.view-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.view-btn {
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    color: #fff;
+}
+
+.view-btn.active {
+    background-color: var(--r1, #ff2a2a);
+    color: white;
+    border-color: var(--r1, #ff2a2a);
+}
+
+.genre-section {
+    margin-bottom: 30px;
+}
+
+.genre-title {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: rgba(22,26,35,.9); /* Fondo oscuro semi-transparente */
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    color: #e9eef6;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #aeb4c2;
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* ====================================================
+   FIX: ALINEACIÓN Y ESTABILIDAD EN POPULARES.HTML
+   ==================================================== */
+
+/* * 1. Fija la sección de películas a la parte superior (flex-start) 
+ * dentro del Flexbox principal (.app-container). Esto evita el "salto"
+ * cuando la altura de la sección cambia.
+ */
+.movies-section {
+    align-self: flex-start;
+}
+
+/* * 2. Asegura que los controles de vista tengan un espacio claro 
+ * después de ellos (aunque ya tienen margin-bottom, esto es un refuerzo) 
+ * y asegura que el contenedor de la lista esté siempre bien delimitado.
+ */
+#moviesContainer {
+    padding-top: 10px;
+}
+
+/* ====================================================
+   FIX: HABILITAR SCROLL EN POPULARES.HTML
+   ==================================================== */
+
+/* Esta regla anula 'overflow: hidden' de la clase .frame 
+   cuando el body tiene la clase 'cinedig-scroll-page',
+   permitiendo que el contenido largo active el scroll de la página. */
+.cinedig-scroll-page .frame {
+    overflow: visible;
+}

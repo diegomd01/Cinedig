@@ -572,4 +572,362 @@ document.addEventListener('DOMContentLoaded', () => {
   
   } // <-- Fin del 'if' de login
 
+  /* ==================================================
+   NUEVO SCRIPT 5: LÓGICA DE COLECCIÓN DE PELÍCULAS (para populares.html)
+   ================================================== */
+  
+  // 1. Elementos del DOM
+  const movieForm = document.getElementById('movieForm');
+  const moviesContainer = document.getElementById('moviesContainer');
+  const ratingStars = document.getElementById('ratingStars');
+  const ratingValue = document.getElementById('ratingValue');
+  const ratingInput = document.getElementById('rating');
+  const notification = document.getElementById('notification');
+  const viewControls = document.querySelectorAll('.view-btn');
+  const formTitle = document.getElementById('formTitle');
+  const submitBtn = document.getElementById('submitBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const movieIdInput = document.getElementById('movieId');
+  const deleteModal = document.getElementById('deleteModal');
+  const closeModalBtn = document.querySelector('.close-btn');
+  const cancelDeleteBtn = document.getElementById('cancelDelete');
+  const confirmDeleteBtn = document.getElementById('confirmDelete');
+
+  // 2. IMPORTANTE: 'if' para que SÓLO se ejecute en populares.html
+  if (movieForm && moviesContainer) {
+
+    let currentRating = 0;
+    let movies = [];
+    let currentView = 'grid';
+    let movieToDelete = null;
+    let isEditing = false;
+    
+    // Cargar películas desde localStorage
+    loadMovies();
+    
+    // Configurar estrellas de calificación
+    ratingStars.addEventListener('click', function(e) {
+        if (e.target.classList.contains('star')) {
+            currentRating = parseInt(e.target.getAttribute('data-value'));
+            updateRatingStars();
+        }
+    });
+    
+    ratingStars.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('star')) {
+            const hoverRating = parseInt(e.target.getAttribute('data-value'));
+            highlightStars(hoverRating);
+        }
+    });
+    
+    ratingStars.addEventListener('mouseout', function() {
+        updateRatingStars();
+    });
+    
+    // Cambiar vista
+    viewControls.forEach(btn => {
+        btn.addEventListener('click', function() {
+            viewControls.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentView = this.getAttribute('data-view');
+            renderMovies();
+        });
+    });
+    
+    // Enviar formulario
+    movieForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('title').value;
+        const rating = currentRating;
+        const genre = document.getElementById('genre').value;
+        const description = document.getElementById('description').value;
+        const poster = document.getElementById('poster').value;
+        
+        if (rating === 0) {
+            showNotification('Por favor, selecciona una calificación', 'error');
+            return;
+        }
+        
+        if (isEditing) {
+            // Editar película existente
+            const id = parseInt(movieIdInput.value);
+            const movieIndex = movies.findIndex(movie => movie.id === id);
+            
+            if (movieIndex !== -1) {
+                movies[movieIndex] = {
+                    id,
+                    title,
+                    rating,
+                    genre,
+                    description,
+                    poster
+                };
+                
+                saveMovies();
+                renderMovies();
+                resetForm();
+                
+                showNotification('Película actualizada correctamente', 'success');
+            }
+        } else {
+            // Agregar nueva película
+            const movie = {
+                id: Date.now(),
+                title,
+                rating,
+                genre,
+                description,
+                poster
+            };
+            
+            movies.push(movie);
+            saveMovies();
+            renderMovies();
+            resetForm();
+            
+            showNotification('Película agregada correctamente', 'success');
+        }
+    });
+    
+    // Cancelar edición
+    cancelBtn.addEventListener('click', resetForm);
+    
+    // Modal de eliminación
+    closeModalBtn.addEventListener('click', closeDeleteModal);
+    cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    confirmDeleteBtn.addEventListener('click', function() {
+        if (movieToDelete) {
+            deleteMovie(movieToDelete);
+            closeDeleteModal();
+        }
+    });
+    
+    // Funciones de utilidad
+    function updateRatingStars() {
+        const stars = ratingStars.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            if (index < currentRating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+        ratingValue.textContent = `${currentRating}/5`;
+        ratingInput.value = currentRating;
+    }
+    
+    function highlightStars(rating) {
+        const stars = ratingStars.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+    
+    function loadMovies() {
+        const storedMovies = localStorage.getItem('movies');
+        if (storedMovies) {
+            movies = JSON.parse(storedMovies);
+            renderMovies();
+        }
+    }
+    
+    function saveMovies() {
+        localStorage.setItem('movies', JSON.stringify(movies));
+    }
+    
+    function renderMovies() {
+        if (movies.length === 0) {
+            moviesContainer.innerHTML = `
+                <div class="empty-state">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQ4IDhWNTZIMTZWOEg0OFpNNDggMEgxNkMxNC4zNDMgMCAxMyAwIDExLjUxNzIgMS4xNjc5NUMxMC4zMDg0IDIuMTExODIgOS42NzQ0NiAzLjI2MzY1IDkuMjAyODIgNC44Mjg0M0M4LjkyODU3IDUuNzA5MDQgOC43MTQyOSA2LjE3MTQzIDguMjUzOCA2LjU4NTcxQzcuNzkyODYgNyA3LjE2MDU3IDcuMjUgNiA3LjI1SDU4QzU2LjgzOTQgNy4yNSA1Ni4yMDcxIDcgNTUuNzQ2MiA2LjU4NTcxQzU1LjI4NTcgNi4xNzE0MyA1NS4wNzE0IDUuNzA5MDQgNTQuNzk3MiA0LjgyODQzQzU0LjMyNTYgMy4yNjM2NSA1My42OTE2IDIuMTExODIgNTIuNDgyOCAxLjE2Nzk1QzUxIDAgNDkuNjU3IDAgNDggMFpNMzIgNDBDMzUuMzEzNyA0MCAzOCAzNy4zMTM3IDM4IDM0QzM4IDMwLjY4NjMgMzUuMzEzNyAyOCAzMiAyOEMyOC42ODYzIDI4IDI2IDMwLjY4NjMgMjYgMzRDMjYgMzcuMzEzNyAyOC42ODYzIDQwIDMyIDQwWk0xNiA1Nkg0OEM0OS4xMDQ2IDU2IDUwIDU1LjEwNDYgNTAgNTQWMjJIMTZWNTRDMTYgNTUuMTA0NiAxNi44OTU0IDU2IDE4IDU2SDE2WiIgZmlsbD0iI0RERERERCIvPgo8L3N2Zz4K" alt="Sin películas">
+                    <h3>No hay películas en tu colección</h3>
+                    <p>Agrega tu primera película usando el formulario</p>
+                </div>
+            `;
+            return;
+        }
+        
+        if (currentView === 'grid') {
+            renderGridView();
+        } else {
+            renderGroupedView();
+        }
+    }
+    
+    function renderGridView() {
+        moviesContainer.innerHTML = `
+            <div class="movies-grid">
+                ${movies.map(movie => `
+                    <div class="movie-card" data-id="${movie.id}">
+                        <img src="${movie.poster}" alt="${movie.title}" class="movie-poster" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDIwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRTVFNUU1Ii8+CjxwYXRoIGQ9Ik04MCAxMjBIMTIwVjE2MEg4MFYxMjBaTTE0MCAxMjBIMTgwVjE2MEgxNDBWMTIwWk04MCAxNzBIMTIwVjIxMEg4MFYxNzBaTTE0MCAxNzBIMTgwVjIxMEgxNDBWMTcwWiIgZmlsbD0iI0JCQkJCQiIvPgo8L3N2Zz4K'">
+                        <div class="movie-info">
+                            <h3 class="movie-title">${movie.title}</h3>
+                            <div class="movie-meta">
+                                <span class="movie-genre">${movie.genre}</span>
+                                <div class="movie-rating">
+                                    <span>★</span>
+                                    <span>${movie.rating}/5</span>
+                                </div>
+                            </div>
+                            <p class="movie-description">${movie.description}</p>
+                            <div class="movie-actions">
+                                <button class="btn btn-warning edit-btn" data-id="${movie.id}">
+                                    <span>Editar</span>
+                                </button>
+                                <button class="btn btn-danger delete-btn" data-id="${movie.id}">
+                                    <span>Eliminar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        // Agregar event listeners a los botones
+        addEventListenersToButtons();
+    }
+    
+    function renderGroupedView() {
+        // Agrupar películas por género
+        const groupedMovies = {};
+        movies.forEach(movie => {
+            if (!groupedMovies[movie.genre]) {
+                groupedMovies[movie.genre] = [];
+            }
+            groupedMovies[movie.genre].push(movie);
+        });
+        
+        let html = '';
+        
+        // Crear secciones por género
+        Object.keys(groupedMovies).sort().forEach(genre => {
+            html += `
+                <div class="genre-section">
+                    <h3 class="genre-title">${genre} (${groupedMovies[genre].length})</h3>
+                    <div class="movies-grid">
+                        ${groupedMovies[genre].map(movie => `
+                            <div class="movie-card" data-id="${movie.id}">
+                                <img src="${movie.poster}" alt="${movie.title}" class="movie-poster" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDIwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRTVFNUU1Ii8+CjxwYXRoIGQ9Ik04MCAxMjBIMTIwVjE2MEg4MFYxMjBaTTE0MCAxMjBIMTgwVjE2MEgxNDBWMTIwWk04MCAxNzBIMTIwVjIxMEg4MFYxNzBaTTE0MCAxNzBIMTgwVjIxMEgxNDBWMTcwWiIgZmlsbD0iI0JCQkJCQiIvPgo8L3N2Zz4K'">
+                                <div class="movie-info">
+                                    <h3 class="movie-title">${movie.title}</h3>
+                                    <div class="movie-meta">
+                                        <span class="movie-genre">${movie.genre}</span>
+                                        <div class="movie-rating">
+                                            <span>★</span>
+                                            <span>${movie.rating}/5</span>
+                                        </div>
+                                    </div>
+                                    <p class="movie-description">${movie.description}</p>
+                                    <div class="movie-actions">
+                                        <button class="btn btn-warning edit-btn" data-id="${movie.id}">
+                                            <span>Editar</span>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="${movie.id}">
+                                            <span>Eliminar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+        
+        moviesContainer.innerHTML = html;
+        
+        // Agregar event listeners a los botones
+        addEventListenersToButtons();
+    }
+    
+    function addEventListenersToButtons() {
+        // Agregar event listeners a los botones de editar
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const movieId = parseInt(this.getAttribute('data-id'));
+                editMovie(movieId);
+            });
+        });
+        
+        // Agregar event listeners a los botones de eliminar
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const movieId = parseInt(this.getAttribute('data-id'));
+                openDeleteModal(movieId);
+            });
+        });
+    }
+    
+    function editMovie(id) {
+        const movie = movies.find(movie => movie.id === id);
+        
+        if (movie) {
+            document.getElementById('title').value = movie.title;
+            document.getElementById('genre').value = movie.genre;
+            document.getElementById('description').value = movie.description;
+            document.getElementById('poster').value = movie.poster;
+            movieIdInput.value = movie.id;
+            
+            currentRating = movie.rating;
+            updateRatingStars();
+            
+            // Cambiar el formulario a modo edición
+            formTitle.textContent = 'Editar Película';
+            submitBtn.innerHTML = '<span>Actualizar Película</span>';
+            cancelBtn.style.display = 'inline-flex';
+            isEditing = true;
+            
+            // Desplazarse al formulario
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
+    function resetForm() {
+        movieForm.reset();
+        currentRating = 0;
+        updateRatingStars();
+        movieIdInput.value = '';
+        
+        // Restaurar el formulario a modo agregar
+        formTitle.textContent = 'Agregar Nueva Película';
+        submitBtn.innerHTML = '<span>Agregar Película</span>';
+        cancelBtn.style.display = 'none';
+        isEditing = false;
+    }
+    
+    function openDeleteModal(id) {
+        movieToDelete = id;
+        deleteModal.style.display = 'flex';
+    }
+    
+    function closeDeleteModal() {
+        deleteModal.style.display = 'none';
+        movieToDelete = null;
+    }
+    
+    function deleteMovie(id) {
+        movies = movies.filter(movie => movie.id !== id);
+        saveMovies();
+        renderMovies();
+        showNotification('Película eliminada', 'success');
+    }
+    
+    function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+  } // <-- Fin del 'if' para populares.html
+
 }); // <-- ESTA ES LA ÚNICA LLAVE DE CIERRE (FIN DEL DOMContentLoaded)

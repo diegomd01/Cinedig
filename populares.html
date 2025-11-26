@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinedig — Populares / Mi Colección</title>
+    
+    <link rel="stylesheet" href="css/styles.css">
+    
+    </head>
+<body class="cinedig-scroll-page">
+    <div class="stage">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+    </div>
+
+    <main class="frame" id="frame">
+        <div class="frame-light left"></div> 
+        <div class="frame-light right"></div>
+        
+        <nav class="nav">
+          <div class="brand"><div class="logo"></div><span>Cinedig</span></div>
+          <div class="tabs">
+            <a href="index.html">Inicio</a>
+            <a href="populares.html">Populares</a>
+            <a>Novedades</a>
+            <a>Categorías</a>
+          </div>
+          <div class="sp"></div>
+          <button class="icon" aria-label="Agregar">+</button>
+          <a href="login.html" class="icon" aria-label="Usuario">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.5"></circle>
+              <path d="M4.5 19.5a7.5 7.5 0 0 1 15 0"></path>
+            </svg>
+          </a>
+        </nav>
+        
+        <div class="content"> 
+            
+            <header class="populares-header">
+                <div class="container">
+                    <h1 class="populares-title">Mi Colección de Películas</h1>
+                    <p class="subtitle">Guarda, organiza y edita tus películas favoritas</p>
+                </div>
+            </header>
+            
+            <div class="populares-container">
+                <div class="app-container">
+                    <section class="form-section">
+                        <h2 id="formTitle">Agregar Nueva Película</h2>
+                        <form id="movieForm">
+                            <input type="hidden" id="movieId">
+                            <div class="form-group">
+                                <label for="title">Título</label>
+                                <input type="text" id="title" required placeholder="Ej: El Padrino">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rating">Calificación</label>
+                                <div class="rating-container">
+                                    <div class="rating-stars" id="ratingStars">
+                                        <span class="star" data-value="1">★</span>
+                                        <span class="star" data-value="2">★</span>
+                                        <span class="star" data-value="3">★</span>
+                                        <span class="star" data-value="4">★</span>
+                                        <span class="star" data-value="5">★</span>
+                                    </div>
+                                    <span id="ratingValue">0/5</span>
+                                </div>
+                                <input type="hidden" id="rating" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="genre">Género</label>
+                                <select id="genre" required>
+                                    <option value="">Selecciona un género</option>
+                                    <option value="Acción">Acción</option>
+                                    <option value="Aventura">Aventura</option>
+                                    <option value="Comedia">Comedia</option>
+                                    <option value="Drama">Drama</option>
+                                    <option value="Fantasía">Fantasía</option>
+                                    <option value="Terror">Terror</option>
+                                    <option value="Ciencia Ficción">Ciencia Ficción</option>
+                                    <option value="Romance">Romance</option>
+                                    <option value="Suspenso">Suspenso</option>
+                                    <option value="Animación">Animación</option>
+                                    <option value="Documental">Documental</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="description">Descripción</label>
+                                <textarea id="description" required placeholder="Breve descripción de la película..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="poster">URL de la imagen (poster)</label>
+                                <input type="url" id="poster" required placeholder="https://ejemplo.com/poster.jpg">
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success" id="submitBtn">
+                                    <span>Agregar Película</span>
+                                </button>
+                                <button type="button" class="btn" id="cancelBtn" style="display: none;">
+                                    <span>Cancelar</span>
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <section class="movies-section">
+                        <div class="view-controls">
+                            <button class="view-btn active" data-view="grid">Vista en Cuadrícula</button>
+                            <button class="view-btn" data-view="grouped">Agrupado por Género</button>
+                        </div>
+                        
+                        <div id="moviesContainer">
+                            </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Confirmar Eliminación</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <p>¿Estás seguro de que quieres eliminar esta película? Esta acción no se puede deshacer.</p>
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn" id="cancelDelete">Cancelar</button>
+                    <button class="btn btn-danger" id="confirmDelete">Eliminar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="notification" class="notification"></div>
+        
+    </main>
+    
+    <script src="js/scripts.js" defer></script>
+</body>
+</html>
